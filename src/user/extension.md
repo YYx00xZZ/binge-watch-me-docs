@@ -2,7 +2,7 @@
 
 ## Download
 
-Go to the [latest release](https://github.com/yourusername/binge-watch-me-extension/releases/latest)
+Go to the [latest release](https://github.com/YYx00xZZ/binge-watch-me-extension/releases/latest)
 and download `BingeWatchMe-extension.zip`.
 
 ## Load in browser

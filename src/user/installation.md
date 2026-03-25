@@ -7,7 +7,7 @@
 
 ## Download
 
-Go to the [latest release](https://github.com/yourusername/binge-watch-me/releases/latest)
+Go to the [latest release](https://github.com/YYx00xZZ/binge-watch-me/releases/latest)
 and download the correct file for your Mac:
 
 - `BingeWatchMe-macos-arm64.zip` — Apple Silicon (M1/M2/M3/M4)

@@ -11,5 +11,5 @@ scan a QR code, and control Netflix from your phone browser — no app install n
 
 ## Repos
 
-- [binge-watch-me](https://github.com/yourusername/binge-watch-me) — the Rust daemon
-- [binge-watch-me-extension](https://github.com/yourusername/binge-watch-me-extension) — the browser extension
+- [binge-watch-me](https://github.com/YYx00xZZ/binge-watch-me) — the Rust daemon
+- [binge-watch-me-extension](https://github.com/YYx00xZZ/binge-watch-me-extension) — the browser extension

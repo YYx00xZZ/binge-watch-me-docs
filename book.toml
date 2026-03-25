@@ -5,8 +5,8 @@ language = "en"
 src = "src"
 
 [output.html]
-git-repository-url = "https://github.com/yourusername/binge-watch-me-docs"
-edit-url-template = "https://github.com/yourusername/binge-watch-me-docs/edit/main/{path}"
+git-repository-url = "https://github.com/YYx00xZZ/binge-watch-me-docs"
+edit-url-template = "https://github.com/YYx00xZZ/binge-watch-me-docs/edit/main/{path}"
 site-url = "/binge-watch-me-docs/"
 
 [output.html.fold]

@@ -9,7 +9,7 @@
 ## Daemon
 ```bash
 # Clone
-git clone https://github.com/yourusername/binge-watch-me
+git clone https://github.com/YYx00xZZ/binge-watch-me
 cd binge-watch-me
 
 # Development build (fast, unoptimized)
@@ -29,7 +29,7 @@ cargo bundle --release
 ## Extension
 ```bash
 # Clone
-git clone https://github.com/yourusername/binge-watch-me-extension
+git clone https://github.com/YYx00xZZ/binge-watch-me-extension
 cd binge-watch-me-extension
 
 # Install dependencies
