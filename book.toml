@@ -1,0 +1,14 @@
+[book]
+title = "binge-watch-me"
+authors = ["Aleksandar Parvanov"]
+language = "en"
+src = "src"
+
+[output.html]
+git-repository-url = "https://github.com/yourusername/binge-watch-me-docs"
+edit-url-template = "https://github.com/yourusername/binge-watch-me-docs/edit/main/{path}"
+site-url = "/binge-watch-me-docs/"
+
+[output.html.fold]
+enable = true
+level = 1
