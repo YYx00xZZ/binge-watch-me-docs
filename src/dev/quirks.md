@@ -12,11 +12,21 @@ instead, which bypasses this behavior.
 The tray must run on the main thread (macOS requirement). Tokio runtime runs
 on a background thread spawned inside the `tray::run` closure.
 
-Menu item actions using Objective-C selectors (`objc2::sel!`) require a
-proper delegate to handle custom actions. Currently "Quit" uses
-`terminate:` which works natively. Custom actions (like "Show QR") are not
-yet implemented via the menu — the setup page opens automatically on launch
-instead.
+## objc2 custom menu actions
+
+Menu item actions require an Objective-C delegate object to receive the selector.
+We use `objc2::define_class!` (renamed from `declare_class!` in objc2 0.6.x — do
+not use the old name) to define `TrayDelegate`, a `MainThreadOnly` ObjC class.
+Each custom `NSMenuItem` has its `target` set to the delegate instance and its
+`action` set to a selector the delegate implements.
+
+Inside `define_class!` methods on a `MainThreadOnly` type, call `self.mtm()` to
+get a `MainThreadMarker` — it is guaranteed safe there without using `unsafe`.
+
+State shared between the background Tokio task and the main-thread delegate uses
+`Arc<Mutex<Option<UpdateInfo>>>` (safe to send across threads) plus
+`thread_local!` `RefCell`s for `Retained<NSMenu>` and `Retained<NSStatusItem>`
+(main-thread-only ObjC objects that cannot implement `Send`).
 
 ## Netflix seek
 
@@ -61,6 +71,44 @@ a try/catch that clears the polling interval. Normal users never see this.
 Unsigned `.app` bundles downloaded from the internet are quarantined by
 macOS. Users must right-click → Shift + Open on first launch. The
 `xattr -cr` command removes the quarantine flag if needed.
+
+The auto-updater runs `xattr -cr` on the newly extracted bundle before
+launching the sidecar script, so the relaunched app is already trusted.
+
+## self_update stores the wrong download URL
+
+`self_update`'s GitHub backend maps `ReleaseAsset.download_url` to
+`asset["url"]` from the GitHub API — an endpoint that returns JSON unless
+the request includes `Accept: application/octet-stream`. Passing this URL
+to any downloader without that header produces a JSON file, not a zip.
+
+We ignore the field entirely and construct the `browser_download_url`
+directly from known parts:
+```
+https://github.com/{owner}/{repo}/releases/download/v{version}/{asset}
+```
+This is a stable GitHub pattern that serves the binary with no special headers.
+
+## self_update zip extraction fails for .app bundles
+
+`self_update::Extract::extract_into` iterates every zip entry and calls
+`fs::File::create` on each path unconditionally. Directory entries (names
+ending with `/`) and symlinks both cause this to fail on macOS with
+`IoError: No such file or directory`.
+
+macOS `.app` bundles inside zips contain both. Use `unzip -o file.zip -d dest`
+instead — it is always present on macOS and handles all entry types correctly.
+
+## self_update Download TLS fails on GitHub CDN
+
+`self_update::Download` builds a `reqwest::blocking::Client` with
+`use_rustls_tls()`, which uses bundled WebPKI roots rather than the macOS
+system keychain. GitHub release downloads redirect through
+`objects.githubusercontent.com`; the rustls TLS handshake against that CDN
+fails intermittently even when the URL opens fine in a browser.
+
+Use `curl -fsSL -o dest url` instead. macOS curl uses Apple's native TLS
+stack, reads from the system keychain, and follows redirects correctly.
 
 ## CoreAudio volume
 

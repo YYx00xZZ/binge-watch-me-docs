@@ -31,3 +31,20 @@ You only need to do this once. After that it launches normally.
 
 When the app starts you will see `BWM` in your menu bar and a setup page
 will open in your browser automatically.
+
+## Updates
+
+The app checks for updates automatically in the background. When a new version
+is available you will see **Update available vX.Y.Z** in the `BWM` menu bar menu.
+
+1. Click `BWM` in the menu bar
+2. Click **Update available vX.Y.Z**
+3. Click **Install and Restart** in the confirmation dialog
+4. The app downloads the update and restarts automatically
+
+You do not need to visit GitHub or download anything manually.
+
+> **Note:** Because the downloaded bundle is not signed, macOS strips the
+> quarantine flag automatically before relaunching. If the updated app is
+> blocked on first launch after an update, run `xattr -cr /Applications/BingeWatchMe.app`
+> in Terminal.

@@ -35,3 +35,16 @@ xattr -cr /Applications/BingeWatchMe.app
 ```
 
 Then try opening it again.
+
+## Update menu item does not appear
+
+The app checks for updates 10 seconds after launch, then every 24 hours.
+If you just installed the app, wait a few seconds for the check to complete.
+If it still does not appear, you are already on the latest version.
+
+## Update download fails or gets stuck
+
+Check that your Mac has internet access, then quit and reopen the app to
+trigger a fresh update check. If the menu bar title shows **Downloading…**
+for a long time (more than a minute for a typical connection), quit the app
+from the menu and try again after reopening.
