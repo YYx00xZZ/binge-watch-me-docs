@@ -61,6 +61,32 @@ Chrome content scripts don't support ES module imports directly. We use
 `dist/content.js` file. The background service worker supports modules
 natively (via `"type": "module"` in manifest.json).
 
+## How content scripts are managed
+
+Content scripts declared in `manifest.json` are only injected into tabs that
+load after the extension becomes active. Tabs that were already open when the
+extension starts or restarts are skipped by the browser.
+
+To handle this, `background.js` listens for two events and programmatically
+injects `dist/content.js` into any already-open Netflix tabs:
+```js
+chrome.runtime.onInstalled.addListener(injectIntoExistingTabs);
+chrome.runtime.onStartup.addListener(injectIntoExistingTabs);
+```
+
+This means:
+- Installing the extension works immediately — no need to reload Netflix
+- Reloading the extension during development re-injects automatically
+- Browser restarts with Netflix already open work without a hard reload
+
+The injection uses `chrome.scripting.executeScript` which requires the
+`scripting` permission in `manifest.json`. Each tab is wrapped in a try/catch
+so a failed injection on one tab does not block the others.
+
+If the content script is injected into a tab that already has it running,
+the old instance throws `"Extension context invalidated"` and clears its
+polling interval. The new instance takes over cleanly.
+
 ## Debugging
 
 - **Background script**: `brave://extensions` → binge-watch-me → Service Worker
